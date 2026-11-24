@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#e94b18">
-<title>Desafio das 3 Pistas — Patrimônio do Brasil</title>
+<title>Desafio das 3 Pistas — Patrimônios do Brasil e do Mundo</title>
 <style>
 :root{--orange:#ff7a1a;--red:#d92d20;--deep:#8f1d16;--cream:#fff4e8;--ink:#3a211b;--gold:#ffd166;--green:#16845b}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#ffb05c 0,#f45b27 38%,#a91f1a 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
@@ -60,7 +60,7 @@ footer{text-align:center;color:#fff5e9;margin:24px 0 0;font-size:.9rem}
   <p class="muted center">Digite o nome do jogador ou da equipe para começar.</p>
   <div class="field"><label for="playerName">Nome do jogador / equipe</label><input id="playerName" maxlength="24" placeholder="Ex.: Turma do 4º ano"></div>
   <button class="primary" id="startBtn" style="width:100%">Começar o desafio ▶</button>
-  <p class="small center">São 20 desafios sobre patrimônios históricos e culturais do Brasil.</p>
+  <p class="small center">São 20 desafios fáceis sobre patrimônios e culturas do Brasil e do mundo.</p>
 </section>
 
 <section id="game" class="panel hidden">
@@ -107,30 +107,28 @@ footer{text-align:center;color:#fff5e9;margin:24px 0 0;font-size:.9rem}
 </div>
 <script>
 const questions = [
- {a:"Cristo Redentor",alts:["cristo redentor"],c:["Sou uma enorme estátua que fica no alto de um morro.","Meus braços estão abertos, como se eu estivesse abraçando a cidade.","Sou um dos cartões-postais mais famosos do Rio de Janeiro."]},
- {a:"Pão de Açúcar",alts:["pao de acucar"],c:["Sou formado por grandes morros de pedra.","Um bondinho leva visitantes até o alto.","Sou uma das paisagens mais conhecidas do Rio de Janeiro."]},
- {a:"Centro Histórico de Ouro Preto",alts:["ouro preto","centro historico de ouro preto"],c:["Minhas ruas têm muitas ladeiras e pedras.","Tenho igrejas antigas ligadas ao período do ouro no Brasil.","Sou uma cidade histórica de Minas Gerais."]},
- {a:"Pelourinho",alts:["pelourinho","centro historico de salvador"],c:["Minhas ruas são cheias de casarões coloridos.","Tenho música, dança, igrejas e muita história afro-brasileira.","Sou um famoso bairro histórico de Salvador, na Bahia."]},
- {a:"Cataratas do Iguaçu",alts:["cataratas do iguacu","foz do iguacu"],c:["Sou formada por centenas de quedas-d'água.","O barulho da água pode ser ouvido de longe.","Fico na fronteira entre Brasil e Argentina, no Paraná."]},
- {a:"Parque Nacional da Serra da Capivara",alts:["serra da capivara","parque nacional da serra da capivara"],c:["Guardo pinturas feitas nas rochas há milhares de anos.","Sou muito importante para estudar a presença humana antiga nas Américas.","Fico no Piauí."]},
- {a:"Brasília",alts:["brasilia"],c:["Fui planejada para ser a capital do Brasil.","Tenho prédios famosos desenhados por Oscar Niemeyer.","Sou a capital federal, inaugurada em 1960."]},
- {a:"Teatro Amazonas",alts:["teatro amazonas"],c:["Tenho uma cúpula colorida que chama a atenção.","Fui construído durante o ciclo da borracha.","Sou um teatro muito famoso em Manaus."]},
- {a:"Estação da Luz",alts:["estacao da luz"],c:["Sou uma construção histórica ligada aos trens.","Minha torre e meu relógio são conhecidos.","Fico na cidade de São Paulo e abrigo um museu dedicado à língua portuguesa nas proximidades."]},
- {a:"Frevo",alts:["frevo"],c:["Sou uma manifestação cultural com música muito animada.","Quem dança costuma fazer passos rápidos e acrobáticos.","Sou muito famoso no Carnaval de Pernambuco e tenho sombrinhas coloridas."]},
- {a:"Samba de Roda",alts:["samba de roda"],c:["Sou uma expressão cultural com música, palmas e dança em roda.","Tenho raízes afro-brasileiras.","Sou tradicional do Recôncavo Baiano."]},
- {a:"Capoeira",alts:["capoeira"],c:["Misturo luta, jogo, música e movimento.","O berimbau é um instrumento muito importante para mim.","Tenho raízes afro-brasileiras e sou praticada em roda."]},
- {a:"Bumba meu boi",alts:["bumba meu boi","bumba-meu-boi"],c:["Sou uma festa popular cheia de personagens e música.","Minha história gira em torno de um boi muito especial.","Sou uma tradição muito forte no Maranhão."]},
- {a:"Círio de Nazaré",alts:["cirio de nazare"],c:["Sou uma grande manifestação de fé e cultura.","Reúno multidões em uma procissão pelas ruas.","Aconteço em Belém, no Pará."]},
- {a:"Cais do Valongo",alts:["cais do valongo"],c:["Sou um sítio arqueológico muito importante para a memória da escravidão.","Fui uma porta de entrada de africanos escravizados no Brasil.","Fico na região portuária do Rio de Janeiro."]},
- {a:"Missões Jesuíticas Guarani",alts:["missoes jesuiticas guarani","missoes jesuiticas","ruinas de sao miguel"],c:["Tenho ruínas de antigas construções religiosas.","Minha história envolve povos indígenas Guarani e missionários jesuítas.","Um dos sítios mais conhecidos fica em São Miguel das Missões, no Rio Grande do Sul."]},
- {a:"Casa de Cora Coralina",alts:["casa de cora coralina"],c:["Sou uma casa antiga às margens de um rio.","Guardo lembranças e objetos de uma importante escritora brasileira.","Fico na Cidade de Goiás e homenageio Cora Coralina."]},
- {a:"Centro Histórico de Goiás",alts:["cidade de goias","centro historico de goias","goias velho"],c:["Tenho ruas de pedra e casarões antigos.","Minha história está ligada à exploração do ouro no interior do Brasil.","Sou também conhecida como Goiás Velho."]},
- {a:"Sítio Roberto Burle Marx",alts:["sitio roberto burle marx","sitio burle marx"],c:["Sou um lugar com jardins, plantas e paisagens planejadas.","Guardo coleções botânicas reunidas por um paisagista famoso.","Fico no Rio de Janeiro e levo o nome de Roberto Burle Marx."]},
- {a:"Roda de Capoeira",alts:["roda de capoeira","capoeira"],c:["As pessoas formam um círculo para acompanhar o jogo.","Há música, palmas e instrumentos como o berimbau.","Sou um espaço tradicional onde a capoeira acontece."]},
- {a:"Arte Kusiwa",alts:["arte kusiwa","pintura corporal wajapi","arte grafica wajapi"],c:["Sou uma forma de arte gráfica indígena.","Meus padrões são feitos com linhas, formas e desenhos tradicionais.","Sou uma expressão cultural do povo Wajãpi, do Amapá."]},
- {a:"Maracatu",alts:["maracatu","maracatu nação"],c:["Sou uma manifestação cultural com cortejo, dança e percussão.","Tenho personagens como rei, rainha e dama do paço.","Sou muito tradicional em Pernambuco."]}
+ {a:"Cristo Redentor",alts:["cristo redentor"],c:["Sou uma estátua gigante com os braços abertos.","Fico no alto do Morro do Corcovado.","Sou um dos símbolos mais famosos do Rio de Janeiro, no Brasil."]},
+ {a:"Torre Eiffel",alts:["torre eiffel","eiffel"],c:["Sou muito alta e feita de ferro.","À noite, posso ficar toda iluminada.","Sou um dos monumentos mais famosos de Paris, na França."]},
+ {a:"Muralha da China",alts:["grande muralha da china","muralha chinesa"],c:["Sou uma construção muito comprida, feita há muitos séculos.","Eu atravesso montanhas e paisagens da China.","Fui construída para ajudar a proteger territórios chineses."]},
+ {a:"Pirâmides do Egito",alts:["piramides de gize","piramides egipcias","piramides"],c:["Tenho formato triangular e fui construída há milhares de anos.","Fui feita para servir de túmulo a faraós.","Fico no Egito, perto da cidade do Cairo."]},
+ {a:"Estátua da Liberdade",alts:["estatua da liberdade"],c:["Seguro uma tocha em uma das mãos.","Sou um presente da França para os Estados Unidos.","Fico em uma ilha de Nova York."]},
+ {a:"Coliseu",alts:["coliseu de roma"],c:["Sou uma construção antiga em formato de arena.","No passado, recebia lutas de gladiadores e grandes espetáculos.","Fico em Roma, na Itália."]},
+ {a:"Taj Mahal",alts:["taj mahal"],c:["Sou um lindo monumento feito de mármore branco.","Fui construído como homenagem de amor a uma esposa.","Fico na Índia."]},
+ {a:"Machu Picchu",alts:["machu picchu"],c:["Sou uma antiga cidade construída nas montanhas.","Tenho muros e construções de pedra dos povos incas.","Fico no Peru, na América do Sul."]},
+ {a:"Big Ben",alts:["big ben","torre elizabeth","relogio big ben"],c:["Sou conhecido por meu grande relógio.","Minhas badaladas podem ser ouvidas na cidade.","Sou um dos símbolos de Londres, na Inglaterra."]},
+ {a:"Chichén Itzá",alts:["chichen itza"],c:["Sou uma antiga cidade com uma grande pirâmide de degraus.","Fui construída pelo povo maia.","Fico no México."]},
+ {a:"Sagrada Família",alts:["sagrada familia","basilica da sagrada familia"],c:["Sou uma igreja muito famosa, com torres altas e diferentes.","Minha construção começou há mais de cem anos.","Fico em Barcelona, na Espanha."]},
+ {a:"Acrópole de Atenas",alts:["acropole","acropole de atenas","partenon"],c:["Tenho templos muito antigos feitos de pedra.","Sou ligado à história da Grécia Antiga.","Fico em Atenas, na Grécia."]},
+ {a:"Cataratas do Iguaçu",alts:["cataratas do iguacu","iguacu"],c:["Sou formada por muitas quedas de água.","Meu som é muito forte e minha paisagem impressiona visitantes.","Fico na fronteira entre Brasil e Argentina."]},
+ {a:"Pelourinho",alts:["pelourinho"],c:["Tenho ruas com casarões coloridos.","Sou conhecido pela música, dança e cultura afro-brasileira.","Sou um bairro histórico de Salvador, na Bahia."]},
+ {a:"Frevo",alts:["frevo"],c:["Sou uma dança muito animada, com passos rápidos.","É comum dançar comigo segurando uma sombrinha colorida.","Sou uma tradição cultural de Pernambuco, no Brasil."]},
+ {a:"Capoeira",alts:["capoeira"],c:["Misturo jogo, luta, dança e música.","O berimbau é um instrumento muito importante para mim.","Sou uma manifestação cultural afro-brasileira."]},
+ {a:"Samba",alts:["samba"],c:["Sou um ritmo musical e uma dança muito conhecidos.","Tenho forte presença no Carnaval brasileiro.","Sou um dos símbolos da cultura do Brasil."]},
+ {a:"Carnaval do Rio de Janeiro",alts:["carnaval","carnaval do rio","desfile das escolas de samba"],c:["Sou uma festa com fantasias, música e muita alegria.","As escolas de samba desfilam em carros alegóricos.","Sou uma das festas mais famosas do Brasil."]},
+ {a:"Teatro Amazonas",alts:["teatro amazonas"],c:["Tenho uma cúpula colorida e uma arquitetura muito bonita.","Fui construído durante o ciclo da borracha.","Sou um teatro histórico de Manaus, no Brasil."]},
+ {a:"Centro Histórico de Ouro Preto",alts:["ouro preto","centro historico de ouro preto"],c:["Tenho igrejas antigas, ladeiras e ruas de pedra.","Minha história está ligada à época do ouro no Brasil.","Sou uma cidade histórica de Minas Gerais."]}
 ];
-// O jogo sorteia 20 desafios diferentes por partida a partir desta lista.
+// O jogo sorteia 20 desafios diferentes por partida.
 const $ = id => document.getElementById(id);
 let player="", score=0, round=1, current=null, clueIndex=0, used=[], answered=false, spinning=false;
 let leaderboard=JSON.parse(localStorage.getItem("tresPistasRanking")||"[]");
