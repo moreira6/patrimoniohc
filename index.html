@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#e94b18">
+<title>Desafio das 3 Pistas — Patrimônio do Brasil</title>
+<style>
+:root{--orange:#ff7a1a;--red:#d92d20;--deep:#8f1d16;--cream:#fff4e8;--ink:#3a211b;--gold:#ffd166;--green:#16845b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#ffb05c 0,#f45b27 38%,#a91f1a 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:1100px;margin:auto;padding:22px 16px 40px}
+header{text-align:center;color:#fff;margin:8px 0 20px}
+.logo{display:inline-block;background:#fff;color:var(--red);font-weight:1000;letter-spacing:.08em;padding:7px 16px;border-radius:999px;box-shadow:0 5px 0 #8f1d16;transform:rotate(-2deg)}
+h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1;margin:18px 0 8px;text-shadow:0 4px 0 #9f2518}
+header p{margin:0;font-weight:650;color:#fff4e8}
+.panel{background:var(--cream);border:4px solid #fff;border-radius:25px;box-shadow:0 12px 0 #8f1d16,0 18px 35px #68180f55;padding:clamp(16px,3vw,28px)}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.pill{background:#ffe0bf;border:2px solid #ffb46e;border-radius:999px;padding:8px 13px;font-weight:800;color:#8d2b16}
+.grid{display:grid;grid-template-columns: minmax(250px,.85fr) minmax(0,1.4fr);gap:24px;align-items:center}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.wheel-wrap{order:2}}
+.wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.wheel-box{position:relative;width:min( min(76vw,360px),100%);aspect-ratio:1}
+.pointer{position:absolute;z-index:3;top:-9px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-top:34px solid #7c1713;filter:drop-shadow(0 3px 1px #fff)}
+#wheel{width:100%;height:100%;border-radius:50%;border:9px solid #fff;box-shadow:0 0 0 6px #ff9a35,0 10px 20px #6f211d66;transition:transform 4s cubic-bezier(.12,.72,.12,1);background:conic-gradient(#ffcf70 0 45deg,#e63b26 45deg 90deg,#ff8a28 90deg 135deg,#b92420 135deg 180deg,#ffd166 180deg 225deg,#e63b26 225deg 270deg,#ff8a28 270deg 315deg,#b92420 315deg 360deg)}
+.wheel-center{position:absolute;inset:36%;border-radius:50%;background:#fff4e8;border:6px solid #9f2518;display:grid;place-items:center;font-size:clamp(1.2rem,4vw,2rem);font-weight:1000;color:#a32219;box-shadow:0 3px 8px #5c160f55}
+.primary{background:linear-gradient(180deg,#ff8b25,#e63820);color:white;font-weight:950;padding:14px 24px;border-radius:15px;box-shadow:0 5px 0 #8f1d16;text-transform:uppercase;letter-spacing:.04em;transition:.15s}
+.primary:hover{filter:brightness(1.07);transform:translateY(-1px)}.primary:active{transform:translateY(3px);box-shadow:0 2px 0 #8f1d16}.primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.secondary{background:#ffe0bf;color:#8d2b16;border:2px solid #ffb46e;border-radius:12px;padding:10px 15px;font-weight:850}
+.question-area{min-width:0}
+h2{color:#9f2518;margin:0 0 8px;font-size:1.65rem}
+.muted{color:#805d50;font-size:.95rem}
+.clues{display:grid;gap:12px;margin:18px 0}
+.clue{display:flex;align-items:flex-start;gap:12px;background:white;border:2px solid #ffd0a2;border-radius:16px;padding:13px 15px;min-height:65px}
+.clue-num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--red);color:white;display:grid;place-items:center;font-weight:1000}
+.clue p{margin:2px 0 0;font-weight:700;line-height:1.35}
+.answer-row{display:flex;gap:9px;margin-top:16px}
+.answer-row input{min-width:0;flex:1;border:2px solid #f2a36b;border-radius:12px;padding:13px 14px;background:#fff;font-weight:650;outline:none}
+.answer-row input:focus{border-color:var(--red);box-shadow:0 0 0 3px #ffb46e66}
+.feedback{min-height:30px;font-weight:850;margin:12px 0 0}
+.good{color:var(--green)}.bad{color:#b3261e}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.setup{max-width:620px;margin:auto}.setup h2{text-align:center}
+.field{display:grid;gap:7px;margin:15px 0}.field label{font-weight:850;color:#76301e}.field input{border:2px solid #f2a36b;border-radius:12px;padding:13px;background:white}
+.scoreboard{margin-top:22px;background:#fff;border:2px solid #ffd0a2;border-radius:18px;padding:15px}
+.score-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.scoreboard h3{margin:0;color:#9f2518}.scoreboard ol{margin:12px 0 0;padding-left:27px}.scoreboard li{padding:5px 2px;font-weight:750}
+.hidden{display:none!important}.center{text-align:center}.big-score{font-size:2.4rem;font-weight:1000;color:#d92d20}
+footer{text-align:center;color:#fff5e9;margin:24px 0 0;font-size:.9rem}
+.confetti{font-size:1.7rem}
+.small{font-size:.83rem;color:#8d6c5e}
+</style>
+</head>
+<body>
+<div class="app">
+<header><span class="logo">JOGO DE ADIVINHAÇÃO</span><h1>DESAFIO DAS 3 PISTAS</h1><p>Gire a roleta, descubra o patrimônio e conquiste pontos!</p></header>
+
+<section id="setup" class="panel setup">
+  <h2>🎤 Quem vai jogar?</h2>
+  <p class="muted center">Digite o nome do jogador ou da equipe para começar.</p>
+  <div class="field"><label for="playerName">Nome do jogador / equipe</label><input id="playerName" maxlength="24" placeholder="Ex.: Turma do 4º ano"></div>
+  <button class="primary" id="startBtn" style="width:100%">Começar o desafio ▶</button>
+  <p class="small center">São 20 desafios sobre patrimônios históricos e culturais do Brasil.</p>
+</section>
+
+<section id="game" class="panel hidden">
+  <div class="topbar">
+    <span class="pill" id="playerTag">Jogador</span>
+    <span class="pill" id="roundTag">Questão 0 de 20</span>
+    <span class="pill" id="pointsTag">⭐ 0 pontos</span>
+  </div>
+  <div class="grid">
+    <div class="wheel-wrap">
+      <div class="wheel-box"><div class="pointer"></div><div id="wheel"></div><div class="wheel-center">?</div></div>
+      <button class="primary" id="spinBtn">🎡 Girar a roleta</button>
+      <p class="small center" id="wheelMessage">Gire para sortear um desafio!</p>
+    </div>
+    <div class="question-area">
+      <h2 id="questionTitle">A roleta vai escolher!</h2>
+      <p class="muted" id="questionIntro">Leia as pistas com atenção. Quanto menos pistas usar, mais pontos você ganha.</p>
+      <div class="clues" id="clues">
+        <div class="clue"><span class="clue-num">1</span><p>Gire a roleta para revelar a primeira pista.</p></div>
+      </div>
+      <div class="answer-row"><input id="answerInput" placeholder="Digite sua resposta..." autocomplete="off" disabled><button class="primary" id="answerBtn" disabled>Responder</button></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="actions">
+        <button class="secondary" id="hintBtn" disabled>Revelar próxima pista</button>
+        <button class="secondary" id="skipBtn" disabled>Passar questão</button>
+        <button class="secondary" id="nextBtn" disabled>Próxima rodada ➜</button>
+      </div>
+    </div>
+  </div>
+  <div class="scoreboard">
+    <div class="score-head"><h3>🏆 Ranking da partida</h3><span class="small">Pontuação acumulada</span></div>
+    <ol id="ranking"></ol>
+  </div>
+</section>
+
+<section id="finish" class="panel hidden center">
+  <div class="confetti">🎉 🏆 🎉</div><h2>Desafio concluído!</h2>
+  <p id="finishName" class="muted"></p><div class="big-score" id="finalScore">0 pontos</div>
+  <p id="finishMessage"></p>
+  <div class="scoreboard" style="text-align:left"><div class="score-head"><h3>🏆 Ranking geral neste dispositivo</h3></div><ol id="finalRanking"></ol></div>
+  <div class="actions" style="justify-content:center"><button class="primary" id="againBtn">Jogar novamente</button><button class="secondary" id="clearRankingBtn">Limpar ranking</button></div>
+</section>
+<footer>🇧🇷 Aprender também é uma aventura! • Desafio das 3 Pistas</footer>
+</div>
+<script>
+const questions = [
+ {a:"Cristo Redentor",alts:["cristo redentor"],c:["Sou uma enorme estátua que fica no alto de um morro.","Meus braços estão abertos, como se eu estivesse abraçando a cidade.","Sou um dos cartões-postais mais famosos do Rio de Janeiro."]},
+ {a:"Pão de Açúcar",alts:["pao de acucar"],c:["Sou formado por grandes morros de pedra.","Um bondinho leva visitantes até o alto.","Sou uma das paisagens mais conhecidas do Rio de Janeiro."]},
+ {a:"Centro Histórico de Ouro Preto",alts:["ouro preto","centro historico de ouro preto"],c:["Minhas ruas têm muitas ladeiras e pedras.","Tenho igrejas antigas ligadas ao período do ouro no Brasil.","Sou uma cidade histórica de Minas Gerais."]},
+ {a:"Pelourinho",alts:["pelourinho","centro historico de salvador"],c:["Minhas ruas são cheias de casarões coloridos.","Tenho música, dança, igrejas e muita história afro-brasileira.","Sou um famoso bairro histórico de Salvador, na Bahia."]},
+ {a:"Cataratas do Iguaçu",alts:["cataratas do iguacu","foz do iguacu"],c:["Sou formada por centenas de quedas-d'água.","O barulho da água pode ser ouvido de longe.","Fico na fronteira entre Brasil e Argentina, no Paraná."]},
+ {a:"Parque Nacional da Serra da Capivara",alts:["serra da capivara","parque nacional da serra da capivara"],c:["Guardo pinturas feitas nas rochas há milhares de anos.","Sou muito importante para estudar a presença humana antiga nas Américas.","Fico no Piauí."]},
+ {a:"Brasília",alts:["brasilia"],c:["Fui planejada para ser a capital do Brasil.","Tenho prédios famosos desenhados por Oscar Niemeyer.","Sou a capital federal, inaugurada em 1960."]},
+ {a:"Teatro Amazonas",alts:["teatro amazonas"],c:["Tenho uma cúpula colorida que chama a atenção.","Fui construído durante o ciclo da borracha.","Sou um teatro muito famoso em Manaus."]},
+ {a:"Estação da Luz",alts:["estacao da luz"],c:["Sou uma construção histórica ligada aos trens.","Minha torre e meu relógio são conhecidos.","Fico na cidade de São Paulo e abrigo um museu dedicado à língua portuguesa nas proximidades."]},
+ {a:"Frevo",alts:["frevo"],c:["Sou uma manifestação cultural com música muito animada.","Quem dança costuma fazer passos rápidos e acrobáticos.","Sou muito famoso no Carnaval de Pernambuco e tenho sombrinhas coloridas."]},
+ {a:"Samba de Roda",alts:["samba de roda"],c:["Sou uma expressão cultural com música, palmas e dança em roda.","Tenho raízes afro-brasileiras.","Sou tradicional do Recôncavo Baiano."]},
+ {a:"Capoeira",alts:["capoeira"],c:["Misturo luta, jogo, música e movimento.","O berimbau é um instrumento muito importante para mim.","Tenho raízes afro-brasileiras e sou praticada em roda."]},
+ {a:"Bumba meu boi",alts:["bumba meu boi","bumba-meu-boi"],c:["Sou uma festa popular cheia de personagens e música.","Minha história gira em torno de um boi muito especial.","Sou uma tradição muito forte no Maranhão."]},
+ {a:"Círio de Nazaré",alts:["cirio de nazare"],c:["Sou uma grande manifestação de fé e cultura.","Reúno multidões em uma procissão pelas ruas.","Aconteço em Belém, no Pará."]},
+ {a:"Cais do Valongo",alts:["cais do valongo"],c:["Sou um sítio arqueológico muito importante para a memória da escravidão.","Fui uma porta de entrada de africanos escravizados no Brasil.","Fico na região portuária do Rio de Janeiro."]},
+ {a:"Missões Jesuíticas Guarani",alts:["missoes jesuiticas guarani","missoes jesuiticas","ruinas de sao miguel"],c:["Tenho ruínas de antigas construções religiosas.","Minha história envolve povos indígenas Guarani e missionários jesuítas.","Um dos sítios mais conhecidos fica em São Miguel das Missões, no Rio Grande do Sul."]},
+ {a:"Casa de Cora Coralina",alts:["casa de cora coralina"],c:["Sou uma casa antiga às margens de um rio.","Guardo lembranças e objetos de uma importante escritora brasileira.","Fico na Cidade de Goiás e homenageio Cora Coralina."]},
+ {a:"Centro Histórico de Goiás",alts:["cidade de goias","centro historico de goias","goias velho"],c:["Tenho ruas de pedra e casarões antigos.","Minha história está ligada à exploração do ouro no interior do Brasil.","Sou também conhecida como Goiás Velho."]},
+ {a:"Sítio Roberto Burle Marx",alts:["sitio roberto burle marx","sitio burle marx"],c:["Sou um lugar com jardins, plantas e paisagens planejadas.","Guardo coleções botânicas reunidas por um paisagista famoso.","Fico no Rio de Janeiro e levo o nome de Roberto Burle Marx."]},
+ {a:"Roda de Capoeira",alts:["roda de capoeira","capoeira"],c:["As pessoas formam um círculo para acompanhar o jogo.","Há música, palmas e instrumentos como o berimbau.","Sou um espaço tradicional onde a capoeira acontece."]},
+ {a:"Arte Kusiwa",alts:["arte kusiwa","pintura corporal wajapi","arte grafica wajapi"],c:["Sou uma forma de arte gráfica indígena.","Meus padrões são feitos com linhas, formas e desenhos tradicionais.","Sou uma expressão cultural do povo Wajãpi, do Amapá."]},
+ {a:"Maracatu",alts:["maracatu","maracatu nação"],c:["Sou uma manifestação cultural com cortejo, dança e percussão.","Tenho personagens como rei, rainha e dama do paço.","Sou muito tradicional em Pernambuco."]}
+];
+// O jogo sorteia 20 desafios diferentes por partida a partir desta lista.
+const $ = id => document.getElementById(id);
+let player="", score=0, round=1, current=null, clueIndex=0, used=[], answered=false, spinning=false;
+let leaderboard=JSON.parse(localStorage.getItem("tresPistasRanking")||"[]");
+const normalize=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+function renderRanking(target="ranking"){
+ const el=$(target);el.innerHTML="";
+ const sorted=[...leaderboard].sort((a,b)=>b.score-a.score).slice(0,10);
+ if(!sorted.length){el.innerHTML="<li>Ainda não há pontuações salvas.</li>";return}
+ sorted.forEach((p,i)=>{const li=document.createElement("li");li.textContent=`${p.name} — ${p.score} pontos`;el.appendChild(li)});
+}
+function start(){player=$("playerName").value.trim()||"Equipe sem nome";score=0;round=1;used=[];$("setup").classList.add("hidden");$("finish").classList.add("hidden");$("game").classList.remove("hidden");$("playerTag").textContent="👤 "+player;updateStats();renderRanking();resetQuestion();}
+function updateStats(){$("roundTag").textContent=`Questão ${round} de 20`;$("pointsTag").textContent=`⭐ ${score} pontos`;}
+function resetQuestion(){
+ current=null;clueIndex=0;answered=false;$("questionTitle").textContent="A roleta vai escolher!";$("questionIntro").textContent="Leia as pistas com atenção. Quanto menos pistas usar, mais pontos você ganha.";
+ $("clues").innerHTML='<div class="clue"><span class="clue-num">1</span><p>Gire a roleta para revelar a primeira pista.</p></div>';
+ $("answerInput").value="";$("answerInput").disabled=true;$("answerBtn").disabled=true;$("hintBtn").disabled=true;$("skipBtn").disabled=true;$("nextBtn").disabled=true;$("feedback").textContent="";$("spinBtn").disabled=false;$("wheelMessage").textContent="Gire para sortear um desafio!";
+}
+function spin(){
+ if(spinning||current||round>=20)return;
+ if(used.length===0){used=[...Array(questions.length).keys()].sort(()=>Math.random()-.5)}
+ current=questions[used.pop()];spinning=true;$("spinBtn").disabled=true;$("wheelMessage").textContent="A roleta está girando...";
+ const wheel=$("wheel");const turns=5+Math.random()*4;wheel.style.transform=`rotate(${turns*360+Math.random()*360}deg)`;
+ setTimeout(()=>{spinning=false;clueIndex=1;$("questionTitle").textContent="Qual é esse patrimônio?";$("questionIntro").textContent="Você pode responder depois de qualquer pista. Acertar com a primeira vale mais!";showClues();$("answerInput").disabled=false;$("answerBtn").disabled=false;$("hintBtn").disabled=false;$("skipBtn").disabled=false;$("answerInput").focus();$("wheelMessage").textContent="Desafio sorteado! Boa sorte!";},4050);
+}
+function showClues(){
+ $("clues").innerHTML="";
+ for(let i=0;i<clueIndex;i++){const div=document.createElement("div");div.className="clue";const n=document.createElement("span");n.className="clue-num";n.textContent=i+1;const p=document.createElement("p");p.textContent=current.c[i];div.append(n,p);$("clues").appendChild(div)}
+}
+function reveal(){if(!current||answered||clueIndex>=3)return;clueIndex++;showClues();if(clueIndex===3)$("hintBtn").disabled=true;}
+function check(){
+ if(!current||answered)return;const val=normalize($("answerInput").value);if(!val){$("feedback").textContent="Digite uma resposta primeiro.";return}
+ const accepted=[current.a,...(current.alts||[])].map(normalize);
+ if(accepted.some(a=>val===a||val.includes(a)||a.includes(val)&&val.length>4)){
+  const gained=clueIndex===1?10:clueIndex===2?7:5;score+=gained;answered=true;$("feedback").className="feedback good";$("feedback").textContent=`🎉 Acertou! Era ${current.a}. Você ganhou ${gained} pontos!`;$("questionTitle").textContent="Resposta correta!";endQuestion();
+ }else{$("feedback").className="feedback bad";$("feedback").textContent="Ainda não! Tente novamente ou peça outra pista.";}
+}
+function endQuestion(){ $("answerInput").disabled=true;$("answerBtn").disabled=true;$("hintBtn").disabled=true;$("skipBtn").disabled=true;$("nextBtn").disabled=false;$("spinBtn").disabled=true;updateStats();}
+function skip(){if(!current||answered)return;answered=true;$("feedback").className="feedback bad";$("feedback").textContent=`A resposta era: ${current.a}. Na próxima você consegue!`;$("questionTitle").textContent="Vamos aprender mais!";endQuestion();}
+function next(){
+ round++;if(round>=20){finish();return}updateStats();resetQuestion();
+}
+function finish(){
+ leaderboard.push({name:player,score,date:new Date().toISOString()});localStorage.setItem("tresPistasRanking",JSON.stringify(leaderboard));$("game").classList.add("hidden");$("finish").classList.remove("hidden");$("finishName").textContent=`${player}, você completou os 20 desafios!`;$("finalScore").textContent=score+" pontos";$("finishMessage").textContent=score>=150?"Incrível! Você é um grande conhecedor do patrimônio brasileiro!":score>=90?"Muito bem! Você descobriu muitas riquezas da nossa cultura!":"Parabéns por participar! Cada pista é uma nova descoberta.";renderRanking("finalRanking");
+}
+$("startBtn").onclick=start;$("spinBtn").onclick=spin;$("hintBtn").onclick=reveal;$("answerBtn").onclick=check;$("answerInput").addEventListener("keydown",e=>{if(e.key==="Enter")check()});$("skipBtn").onclick=skip;$("nextBtn").onclick=next;
+$("againBtn").onclick=()=>{$("finish").classList.add("hidden");$("setup").classList.remove("hidden");$("playerName").value=player;};
+$("clearRankingBtn").onclick=()=>{if(confirm("Tem certeza de que deseja apagar todo o ranking deste dispositivo?")){leaderboard=[];localStorage.removeItem("tresPistasRanking");renderRanking("finalRanking");}};
+</script>
+</body></html>
